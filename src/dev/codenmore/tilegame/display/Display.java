@@ -1,11 +1,15 @@
 package dev.codenmore.tilegame.display;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Display {
 
     //Define a JFrame
     private JFrame frame;
+
+    //Define a canvas
+    private Canvas canvas;
 
     //Setting the title, width and height of the window
     private String title;
@@ -35,5 +39,19 @@ public class Display {
         frame.setResizable(true);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        setCanvas();
+
+        frame.add(canvas);
+        frame.pack();
+    }
+
+
+    private void setCanvas() {
+        canvas = new Canvas();
+
+        canvas.setPreferredSize(new Dimension(width, height));
+        canvas.setMaximumSize(new Dimension(width, height));
+        canvas.setMinimumSize(new Dimension(width, height));
     }
 }
