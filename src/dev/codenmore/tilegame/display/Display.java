@@ -44,6 +44,9 @@ public class Display {
 
         frame.add(canvas);
         frame.pack();
+
+        //automatically extend the frame to be the size of the screen [Not Full Screen]
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     }
 
 
@@ -53,5 +56,10 @@ public class Display {
         canvas.setPreferredSize(new Dimension(width, height));
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
+    }
+
+    /* GET CANVAS */
+    public Canvas getCanvas() {
+        return canvas;
     }
 }

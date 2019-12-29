@@ -1,20 +1,28 @@
 package dev.codenmore.tilegame.display;
 
+import java.awt.*;
+import java.awt.image.BufferStrategy;
+
 public class Game implements Runnable{
 
     private final String THREAD_TERMINATION_ERROR_MESSAGE = "Error: Failed to terminate the thread";
+    private final int TOTAL_NUMBER_OF_BUFFERS_IN_BUFFER_STRATEGY = 3;
 
     private String title = "";
-    private int length, width = 0;
+    private int height, width = 0;
     private boolean running = false;
 
     private Display display;
     private Thread thread;
 
-    public Game(String title, int width, int length) {
+    // Defining variables for rendering related tasks
+    private Graphics graphics;
+    private BufferStrategy bufferStrategy;
+
+    public Game(String title, int width, int height) {
         this.title = title;
         this.width = width;
-        this.length = length;
+        this.height = height;
     }
 
     /**
@@ -24,7 +32,7 @@ public class Game implements Runnable{
      * TO BE CONTINUED...
      */
     private void initialization() {
-        display = new Display(title, width, length);
+        display = new Display(title, width, height);
     }
 
     /**
@@ -51,8 +59,34 @@ public class Game implements Runnable{
      *
      * TO BE CONTINUED...
      */
-    private void updateCanvas() {
+    private void render() {
+        //check if a buffer exists in the canvas
+        bufferStrategy = display.getCanvas().getBufferStrategy();
 
+        if(bufferStrategy == null) {
+            display.getCanvas().createBufferStrategy(TOTAL_NUMBER_OF_BUFFERS_IN_BUFFER_STRATEGY);
+            return;
+        }
+
+        //if the bufferStrategy is not null, then we will start the drawing process
+        graphics = bufferStrategy.getDrawGraphics();
+
+        graphics.clearRect(0, 0, width, height);
+
+        //Draw a rectangle in the middle
+        graphics.drawRect(width/2, height/2, width, height);
+
+        //Draw a rectangle that collides with the one above
+        graphics.drawRect(width/4, height/4, width/2, height/2);
+
+        //Draw a 3d rectangle
+        graphics.draw3DRect(width, height, width, height, false);
+        graphics.drawRoundRect(width, height, width, height, 2, 2);
+        graphics.drawString("Hello World", width*2, height*2);
+
+        //inform the buffer and the canvas that we are done drawing and buffer can get reflected to the canvas
+        bufferStrategy.show();
+        graphics.dispose();
     }
 
     public void run() {
@@ -63,7 +97,7 @@ public class Game implements Runnable{
         // while loop to run the game until it ends
         while(running) {
             updateGameStatus();
-            updateCanvas();
+            render();
         }
 
         stop();

@@ -5,7 +5,8 @@ import dev.codenmore.tilegame.display.Game;
 public class Launcher {
 
     public static void main(String[] args) {
-        new Game("Genius Game", 400, 400);
+        Game game = new Game("Best Game Ever", 350, 350);
+        game.start();
 
     }
 }
