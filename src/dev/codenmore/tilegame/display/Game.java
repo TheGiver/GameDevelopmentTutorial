@@ -2,6 +2,7 @@ package dev.codenmore.tilegame.display;
 
 import java.awt.*;
 import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 public class Game implements Runnable{
 
@@ -19,11 +20,20 @@ public class Game implements Runnable{
     private Graphics graphics;
     private BufferStrategy bufferStrategy;
 
+    //Defining a variable of type BufferedImage to retrieve the image's dimensions
+    private BufferedImage image;
+
+    //Defining variables to get screen dimensions
+    private int screenWidth = 0;
+    private int screenHeight = 0;
+
     public Game(String title, int width, int height) {
         this.title = title;
         this.width = width;
         this.height = height;
     }
+
+    //****************************************************************************************************************//
 
     /**
      * Main Purpose:
@@ -34,6 +44,8 @@ public class Game implements Runnable{
     private void initialization() {
         display = new Display(title, width, height);
     }
+
+    //****************************************************************************************************************//
 
     /**
      * Main Purpose:
@@ -48,6 +60,8 @@ public class Game implements Runnable{
     private void updateGameStatus() {
 
     }
+
+    //****************************************************************************************************************//
 
     /**
      * Main Purpose:
@@ -73,21 +87,17 @@ public class Game implements Runnable{
 
         graphics.clearRect(0, 0, width, height);
 
-        //Draw a rectangle in the middle
-        graphics.drawRect(width/2, height/2, width, height);
+        // Insert in image to the canvas
+        image = ImageLoader.imageLoader("/Images/Nike_Logo.jpeg");
 
-        //Draw a rectangle that collides with the one above
-        graphics.drawRect(width/4, height/4, width/2, height/2);
-
-        //Draw a 3d rectangle
-        graphics.draw3DRect(width, height, width, height, false);
-        graphics.drawRoundRect(width, height, width, height, 2, 2);
-        graphics.drawString("Hello World", width*2, height*2);
+        graphics.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
 
         //inform the buffer and the canvas that we are done drawing and buffer can get reflected to the canvas
         bufferStrategy.show();
         graphics.dispose();
     }
+
+    //****************************************************************************************************************//
 
     public void run() {
 
@@ -103,6 +113,8 @@ public class Game implements Runnable{
         stop();
     }
 
+    //****************************************************************************************************************//
+
     public synchronized void start() {
         // If the game is running, do not initialize another thread
         if(running) {
@@ -114,6 +126,8 @@ public class Game implements Runnable{
         thread = new Thread(this);
         thread.start();
     }
+
+    //****************************************************************************************************************//
 
     public synchronized void stop() {
         // If the game is not running, then do not attempt to terminate the thread
@@ -129,3 +143,19 @@ public class Game implements Runnable{
         }
     }
 }
+
+//****************************************************************************************************************//
+
+/*
+Segment of code to draw different rectangles
+
+        graphics.drawRect(width/2, height/2, width, height);
+
+        //Draw a rectangle that collides with the one above
+        graphics.drawRect(width/4, height/4, width/2, height/2);
+
+        //Draw a 3d rectangle
+        graphics.draw3DRect(width, height, width, height, false);
+        graphics.drawRoundRect(width, height, width, height, 2, 2);
+         graphics.drawString("Hello World", width*2, height*2);
+*/
